@@ -5,7 +5,7 @@ import { Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-class TodayView extends React.Component {
+class DurationSummary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,7 +18,9 @@ class TodayView extends React.Component {
                 calories: 0.0,
                 date: ''
             },
-            activities: []        }
+            activities: [],
+            totalMins: 0.0
+        }
 
     }
     componentDidMount() {
@@ -34,34 +36,26 @@ class TodayView extends React.Component {
     }
 
     totalMinutes(){
+        console.log(this.state.activities.duration)
 
     }
 
     render() {
+        this.totalMinutes();
         return (
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: "center" }}>
 
-                <View syle={styles.list}>
-                    <FlatList
-                        style={styles.list}
-                        data={this.state.activities}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) =>
-                            <View style={styles.list} >
-                                <Text style={styles.text}>Activity Name: {item.name}</Text>
-                                <Text style={styles.text}>Duration: {item.duration} minutes</Text>
-                                <Text style={styles.text}>Calories: {item.calories}</Text>
-                                <Text style={styles.text}>Date & Time: {item.date}</Text>
-                                <View style={styles.spaceSmall} />
-                            </View>}
-                    />
+            <ScrollView style={styles.mainContainer} contentContainerStyle={{ flexGrow: 11, justifyContent: 'center', alignItems: "center" }}>
+                <View style={styles.spaceSmall} />
+                <View style={styles.list}>
+                    <Text style={styles.text}>Your Daily Activity Goal: {}</Text>
+                    <Text style={styles.text}>Minutes you exercised today: </Text>
                 </View>
                 <View style={styles.spaceSmall} />
-
+                <View style={styles.spaceSmall} />
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                     <Button color="#942a21" style={styles.buttonInline} title="Log More Exercises" onPress={() => this.props.navigation.navigate('Exercise')} />
                     <View style={styles.spaceHorizontal} />
-                    <Button color="#942a21" style={styles.buttonInline} title="View Exercise Ratio" onPress={() => this.props.navigation.navigate('Duration')} />
+                    <Button color="#942a21" style={styles.buttonInline} title="Daily View" onPress={() => this.props.navigation.navigate('DailyTracker')} />      
                 </View>
             </ScrollView>
         );
@@ -144,4 +138,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default TodayView;
+export default DurationSummary;

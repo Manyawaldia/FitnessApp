@@ -205,7 +205,8 @@ class ProfileView extends React.Component {
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           <Button color="#942a21" style={styles.buttonInline} title="Save Profile" onPress={() => this.handleSaveProfile()} />
           <View style={styles.spaceHorizontal} />
-          <Button color="#a1635f" style={styles.buttonInline} title="Exit" onPress={() => this.backToLogin()} />
+          <Button color="#942a21" style={styles.buttonInline} title="Daily View" onPress={() => this.props.navigation.navigate('DailyTracker')}/>
+        
         </View>
         <View style={styles.space} />
       </ScrollView>

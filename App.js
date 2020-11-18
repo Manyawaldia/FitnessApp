@@ -6,13 +6,16 @@ import SignupView from './SignupView';
 import TodayView from './TodayView'
 import ExercisesView from './ExercisesView'
 import ProfileView from './ProfileView'
+import DurationSummary from './DurationSummary'
 
+// Import vector icons
+import Icon from 'react-native-vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { TouchableOpacity, Image, View, Text } from 'react-native';
+import { TouchableOpacity, Image, View, Text, AsyncStorage } from 'react-native';
 
 class App extends React.Component {
 
@@ -25,7 +28,6 @@ class App extends React.Component {
 
     this.login = this.login.bind(this);
     this.revokeAccessToken = this.revokeAccessToken.bind(this);
-
     this.SignoutButton = this.SignoutButton.bind(this);
   }
 
@@ -55,8 +57,8 @@ class App extends React.Component {
   SignoutButton = () => {
     return <>
       <View style={{ flexDirection: 'row', marginRight: 25 }}>
-        <TouchableOpacity onPress={() => alert("We should probably change this to log us out! An icon would be nice too!")}>
-          <Text> X</Text>
+        <TouchableOpacity onPress={() => this.revokeAccessToken()}>
+          <Icon name="log-out" style={{ paddingLeft: '20px', paddingRight: '50px' }} size={30} color="#900" />
         </TouchableOpacity>
       </View>
     </>
@@ -89,6 +91,7 @@ class App extends React.Component {
         <AuthStack.Navigator>
           {!this.state.accessToken ? (
             <>
+
               <AuthStack.Screen
                 name="SignIn"
                 options={{
@@ -109,10 +112,29 @@ class App extends React.Component {
             </>
           ) : (
               <>
+                <AuthStack.Screen
+                  name="Exercise"
+                  options={{
+                    headerLeft: this.SignoutButton,
+                    title: 'Add Activity',
+                  }}
+                >
+                  {(props) => <ExercisesView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
+                </AuthStack.Screen>
+                <AuthStack.Screen name="DailyTracker" options={{
+                  headerLeft: this.SignoutButton
+                }}>
+                  {(props) => <TodayView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
+                </AuthStack.Screen>
                 <AuthStack.Screen name="FitnessTracker" options={{
                   headerLeft: this.SignoutButton
                 }}>
                   {(props) => <ProfileView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
+                </AuthStack.Screen>
+                <AuthStack.Screen name="Duration" options={{
+                  headerLeft: this.SignoutButton
+                }}>
+                  {(props) => <DurationSummary {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
                 </AuthStack.Screen>
               </>
 
