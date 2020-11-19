@@ -10,7 +10,6 @@ class DurationSummary extends React.Component {
         super(props);
         this.state = {
             isModalVisible: false,
-            // activity:[]
             activity: {
                 id: 0,
                 name: '',
@@ -19,8 +18,17 @@ class DurationSummary extends React.Component {
                 date: ''
             },
             activities: [],
-            totalMins: 0.0
+            totalMins: 0.0,
+            firstName: "",
+            lastName: "",
+            goalDailyCalories: 0.0,
+            goalDailyProtein: 0.0,
+            goalDailyCarbohydrates: 0.0,
+            goalDailyFat: 0.0,
+            goalDailyActivity: 0.0,
+            minsLeft:0.0
         }
+        const mins = 0;
 
     }
     componentDidMount() {
@@ -33,22 +41,47 @@ class DurationSummary extends React.Component {
                 this.setState({ activities: res.activities });
                 // console.log(res)
             });
+            fetch('https://mysqlcs639.cs.wisc.edu/users/' + this.props.username, {
+                method: 'GET',
+                headers: { 'x-access-token': this.props.accessToken }
+              })
+                .then(res => res.json())
+                .then(res => {
+                  this.setState({
+                    firstName: res.firstName,
+                    lastName: res.lastName,
+                    goalDailyCalories: res.goalDailyCalories,
+                    goalDailyProtein: res.goalDailyProtein,
+                    goalDailyCarbohydrates: res.goalDailyCarbohydrates,
+                    goalDailyFat: res.goalDailyFat,
+                    goalDailyActivity: res.goalDailyActivity
+                  });
+                });
+                    // c
     }
 
     totalMinutes(){
-        console.log(this.state.activities.duration)
+        let tot = 0;
+
+        for (var i = 0, l = this.state.activities.length; i < l; i++) {
+           tot = tot + this.state.activities[i].duration;
+        }
+        // this.setState({totalMins:tot});
+        this.state.totalMins = tot;
+        // console.log(this.state.totalMins);
 
     }
 
     render() {
-        this.totalMinutes();
+        this.mins = this.totalMinutes();
+        this.state.minsLeft = this.state.goalDailyActivity- this.state.totalMins;
         return (
-
             <ScrollView style={styles.mainContainer} contentContainerStyle={{ flexGrow: 11, justifyContent: 'center', alignItems: "center" }}>
                 <View style={styles.spaceSmall} />
                 <View style={styles.list}>
-                    <Text style={styles.text}>Your Daily Activity Goal: {}</Text>
-                    <Text style={styles.text}>Minutes you exercised today: </Text>
+                    <Text style={styles.text}>Your Daily Activity Goal: {this.state.goalDailyActivity}</Text>
+                    <Text style={styles.text}>Minutes you exercised today: {this.state.totalMins} </Text>
+                    <Text style={styles.text}>Minutes you still need to reach goal:{this.state.minsLeft} </Text>
                 </View>
                 <View style={styles.spaceSmall} />
                 <View style={styles.spaceSmall} />
@@ -112,7 +145,6 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     list: {
-      
         fontWeight: 'bold',
         borderWidth: 1,
         borderColor: 'black'

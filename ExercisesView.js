@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, FlatList, TextInput, ScrollView, Grid, Header, List } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, TextInput, ScrollView, Grid, Header, Modal, List } from 'react-native';
 import { Dimensions } from 'react-native';
-import Modal from 'modal-react-native-web';
+// import Modal from 'modal-react-native-web';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
 
