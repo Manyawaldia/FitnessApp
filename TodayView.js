@@ -18,7 +18,8 @@ class TodayView extends React.Component {
                 calories: 0.0,
                 date: ''
             },
-            activities: []        }
+            activities: []
+        }
 
     }
     componentDidMount() {
@@ -33,14 +34,54 @@ class TodayView extends React.Component {
             });
     }
 
-    totalMinutes(){
+    totalMinutes() {
 
+    }
+
+    delete(item) {
+        this.setState({
+            isModalVisible: false
+        }, () => fetch('https://mysqlcs639.cs.wisc.edu/activities/' + item.id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': this.props.accessToken
+            },
+            //one activity at a time
+            body: JSON.stringify({
+                id: item.id,
+                name: this.state.activity.name,
+                duration: this.state.activity.duration,
+                calories: this.state.activity.calories,
+                date: ''
+
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                alert("Your exercise was deleted!");
+            })
+            .catch(err => {
+                alert("Something went wrong! Verify you have filled out the fields correctly.");
+            }));
+
+    }
+
+
+    deleteActivity(item) {
+        let i = 0
+        for (i = 0; i < this.state.activities.length; i++) {
+            if (item.id === this.state.activities[i].id) {
+                this.setState(this.state.activities.splice(i, 1));
+                this.delete(item)
+            }
+        }
     }
 
     render() {
         return (
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: "center" }}>
-
+            // <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: "center" }}>
+            <View>
                 <View syle={styles.list}>
                     <FlatList
                         style={styles.list}
@@ -53,8 +94,15 @@ class TodayView extends React.Component {
                                 <Text style={styles.text}>Calories: {item.calories}</Text>
                                 <Text style={styles.text}>Date & Time: {item.date}</Text>
                                 <View style={styles.spaceSmall} />
+                                <View style={styles.button}>
+                                    <Button color="#942a21" style={styles.buttonInline} title="Remove Activity" onPress={() => {
+                                        this.deleteActivity(item)
+                                    }} > Remove Activity </Button>
+                                </View>
                             </View>}
                     />
+
+                    <View style={styles.spaceSmall} />
                 </View>
                 <View style={styles.spaceSmall} />
 
@@ -63,7 +111,8 @@ class TodayView extends React.Component {
                     <View style={styles.spaceHorizontal} />
                     <Button color="#942a21" style={styles.buttonInline} title="View Exercise Ratio" onPress={() => this.props.navigation.navigate('Duration')} />
                 </View>
-            </ScrollView>
+                {/* </ScrollView> */}
+            </View>
         );
     }
 }
@@ -118,7 +167,7 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     list: {
-      
+
         fontWeight: 'bold',
         borderWidth: 1,
         borderColor: 'black'

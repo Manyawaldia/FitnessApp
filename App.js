@@ -91,7 +91,6 @@ class App extends React.Component {
         <AuthStack.Navigator>
           {!this.state.accessToken ? (
             <>
-
               <AuthStack.Screen
                 name="SignIn"
                 options={{
@@ -100,7 +99,6 @@ class App extends React.Component {
               >
                 {(props) => <LoginView {...props} login={this.login} />}
               </AuthStack.Screen>
-
               <AuthStack.Screen
                 name="SignUp"
                 options={{
@@ -122,17 +120,20 @@ class App extends React.Component {
                   {(props) => <ExercisesView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
                 </AuthStack.Screen>
                 <AuthStack.Screen name="DailyTracker" options={{
-                  headerLeft: this.SignoutButton
+                  headerLeft: this.SignoutButton,
+                  title: 'Daily View',
                 }}>
                   {(props) => <TodayView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
                 </AuthStack.Screen>
                 <AuthStack.Screen name="FitnessTracker" options={{
-                  headerLeft: this.SignoutButton
+                  headerLeft: this.SignoutButton,
+                  title: 'User Profile',
                 }}>
                   {(props) => <ProfileView {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
                 </AuthStack.Screen>
                 <AuthStack.Screen name="Duration" options={{
-                  headerLeft: this.SignoutButton
+                  title: 'Exercise Ratio',
+                  headerLeft: this.SignoutButton,
                 }}>
                   {(props) => <DurationSummary {...props} username={this.state.username} accessToken={this.state.accessToken} revokeAccessToken={this.revokeAccessToken} />}
                 </AuthStack.Screen>
